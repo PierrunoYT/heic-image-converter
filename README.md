@@ -22,6 +22,7 @@ A modern web application for bi-directional image conversion between HEIC and ot
 - `converter_core.py`: Contains the core conversion functionality
 - `templates/`: Contains HTML templates for the web application
 - `static/`: Contains static assets (CSS, JavaScript) for the web interface
+- `requirements.txt`: List of Python package dependencies
 - `README.md`: This file
 - `.gitignore`: Specifies which files Git should ignore
 - `LICENSE`: MIT License file
@@ -32,7 +33,12 @@ A modern web application for bi-directional image conversion between HEIC and ot
 - Git (for cloning the repository)
 
 ### Python Packages
+All required packages are listed in `requirements.txt` and can be installed with pip:
+```bash
+pip install -r requirements.txt
+```
 
+The main dependencies are:
 - [pyheif](https://pypi.org/project/pyheif/) - For reading HEIC image files
 - [Pillow](https://pypi.org/project/Pillow/) - For processing images
 - [Flask](https://pypi.org/project/Flask/) - Web framework for the application
@@ -47,7 +53,7 @@ A modern web application for bi-directional image conversion between HEIC and ot
 
 2. **Install Required Packages:**
    ```bash
-   pip install pyheif Pillow Flask
+   pip install -r requirements.txt
    ```
 
 ## Usage
@@ -81,7 +87,7 @@ The web interface allows you to:
    ```cmd
    git clone https://github.com/PierrunoYT/heic-image-converter.git
    cd heic-image-converter
-   pip install pyheif Pillow Flask
+   pip install -r requirements.txt
    python app.py
    ```
 
@@ -101,7 +107,7 @@ The web interface allows you to:
    ```bash
    git clone https://github.com/PierrunoYT/heic-image-converter.git
    cd heic-image-converter
-   pip3 install pyheif Pillow Flask
+   pip3 install -r requirements.txt
    python3 app.py
    ```
 
@@ -117,7 +123,7 @@ The web interface allows you to:
    ```bash
    git clone https://github.com/PierrunoYT/heic-image-converter.git
    cd heic-image-converter
-   pip3 install pyheif Pillow Flask
+   pip3 install -r requirements.txt
    python3 app.py
    ```
 

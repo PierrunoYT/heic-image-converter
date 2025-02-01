@@ -1,5 +1,8 @@
 # HEIC Image Converter
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub Repository](https://img.shields.io/badge/GitHub-Repository-blue.svg)](https://github.com/PierrunoYT/heic-image-converter)
+
 A modern web application for bi-directional image conversion between HEIC and other popular formats (JPEG, PNG, WEBP, BMP). Convert your images to HEIC for better compression, or convert HEIC files to widely supported formats for better compatibility.
 
 ## Features
@@ -26,6 +29,7 @@ A modern web application for bi-directional image conversion between HEIC and ot
 ## Requirements
 
 - Python 3.6 or higher
+- Git (for cloning the repository)
 
 ### Python Packages
 
@@ -33,11 +37,18 @@ A modern web application for bi-directional image conversion between HEIC and ot
 - [Pillow](https://pypi.org/project/Pillow/) - For processing images
 - [Flask](https://pypi.org/project/Flask/) - Web framework for the application
 
-Install the required packages with:
+## Installation
 
-```bash
-pip install pyheif Pillow Flask
-```
+1. **Clone the Repository:**
+   ```bash
+   git clone https://github.com/PierrunoYT/heic-image-converter.git
+   cd heic-image-converter
+   ```
+
+2. **Install Required Packages:**
+   ```bash
+   pip install pyheif Pillow Flask
+   ```
 
 ## Usage
 
@@ -61,42 +72,51 @@ The web interface allows you to:
 
 ### Windows
 
-1. **Install Python:**
+1. **Install Python and Git:**
+   - Download and install Git from [git-scm.com](https://git-scm.com/download/windows)
    - Download the latest Python installer from [python.org](https://www.python.org/downloads/windows/)
-   - Run the installer and choose the option to add Python to your PATH
+   - Run the installers and choose the option to add both to your PATH
 
 2. **Open a Command Prompt or PowerShell:**
    ```cmd
-   cd path\to\your\project
+   git clone https://github.com/PierrunoYT/heic-image-converter.git
+   cd heic-image-converter
    pip install pyheif Pillow Flask
    python app.py
    ```
 
 ### macOS
 
-1. **Install Python:**
+1. **Install Required Tools:**
    ```bash
-   brew install python3
+   # Install Homebrew if not already installed
+   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+   
+   # Install Python and Git
+   brew install python3 git
    ```
-   Or download from [python.org](https://www.python.org/downloads/mac-osx/)
+   Or download Python from [python.org](https://www.python.org/downloads/mac-osx/)
 
-2. **Open Terminal:**
+2. **Clone and Run:**
    ```bash
-   cd /path/to/your/project
+   git clone https://github.com/PierrunoYT/heic-image-converter.git
+   cd heic-image-converter
    pip3 install pyheif Pillow Flask
    python3 app.py
    ```
 
 ### Linux
 
-1. **Install Python:**
+1. **Install Required Tools:**
    ```bash
-   sudo apt-get update && sudo apt-get install python3 python3-pip
+   sudo apt-get update
+   sudo apt-get install python3 python3-pip git
    ```
 
-2. **Open Terminal:**
+2. **Clone and Run:**
    ```bash
-   cd /path/to/your/project
+   git clone https://github.com/PierrunoYT/heic-image-converter.git
+   cd heic-image-converter
    pip3 install pyheif Pillow Flask
    python3 app.py
    ```
@@ -109,10 +129,24 @@ For all platforms, after starting the application, open your browser and navigat
 - Both `.jpg` and `.jpeg` refer to the same image format
 - This application uses `.jpg` as the default extension for JPEG files
 
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## Repository
+
+View the project on GitHub: [https://github.com/PierrunoYT/heic-image-converter](https://github.com/PierrunoYT/heic-image-converter)
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 Copyright (c) 2025 PierrunoYT
 
-Feel free to modify or extend this project based on your needs. 
+Feel free to modify or extend this project based on your needs.

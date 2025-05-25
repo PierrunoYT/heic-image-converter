@@ -4,7 +4,7 @@
 import io
 from pathlib import Path
 from typing import Set
-from flask import Flask, request, render_template, send_file, flash, redirect, url_for, jsonify
+from flask import Flask, request, render_template, send_file, flash, redirect
 import secrets
 from converter_core import HeicConverter
 
@@ -26,12 +26,12 @@ def index():
         if "file" not in request.files:
             flash("No file part in the request")
             return redirect(request.url)
-            
+
         file = request.files["file"]
         if file.filename == "":
             flash("No file selected")
             return redirect(request.url)
-            
+
         if not file.filename or not allowed_file(file.filename):
             flash("Unsupported file type. Please select a valid image file (HEIC, JPEG, PNG, WEBP, or BMP).")
             return redirect(request.url)
@@ -46,11 +46,11 @@ def index():
             # Read and process the file using the core converter
             file_bytes = file.read()
             output_bytes = HeicConverter.convert_heic(file_bytes, output_format=target_format)
-            
+
             # Create a safe output filename using the preferred extension
             extension = HeicConverter.get_extension_for_format(target_format)
             output_filename = f"{Path(file.filename).stem}.{extension}"
-            
+
             return send_file(
                 io.BytesIO(output_bytes),
                 mimetype=f"image/{target_format.lower()}",
@@ -68,4 +68,5 @@ def index():
 
     return render_template("index.html")
 
-app.run(host="0.0.0.0", port=5000, debug=False)  # Run the web application 
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=False)  # Run the web application

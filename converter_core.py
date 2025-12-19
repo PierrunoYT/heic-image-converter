@@ -19,7 +19,7 @@ class HeicConverter:
         
         Args:
             input_data: Either a Path object pointing to the input file or bytes containing the image data
-            output_format: Target format (JPEG, PNG, WEBP, BMP)
+            output_format: Target format (JPEG, PNG, WEBP, BMP, HEIC)
             
         Returns:
             bytes: Converted image data
@@ -34,15 +34,26 @@ class HeicConverter:
             else:
                 image = Image.open(io.BytesIO(input_data))
             
-            # Convert to RGB if needed
+            # Normalize HEIC to HEIF for Pillow compatibility
+            save_format = "HEIF" if output_format.upper() == "HEIC" else output_format
+            
+            # Determine if the target format supports alpha channel
+            supports_alpha = save_format.upper() in ('PNG', 'WEBP', 'HEIF')
+            
+            # Convert image mode based on alpha channel support
             if image.mode in ('RGBA', 'LA') or (image.mode == 'P' and 'transparency' in image.info):
-                image = image.convert('RGBA')
+                # Image has transparency
+                if supports_alpha:
+                    image = image.convert('RGBA')
+                else:
+                    # Formats like JPEG and BMP don't support alpha, convert to RGB
+                    image = image.convert('RGB')
             else:
                 image = image.convert('RGB')
             
             # Save to bytes
             output = io.BytesIO()
-            image.save(output, format=output_format)
+            image.save(output, format=save_format)
             return output.getvalue()
             
         except Exception as e:
@@ -53,7 +64,7 @@ class HeicConverter:
         """Get the appropriate file extension for the specified format.
         
         Args:
-            format_name: The format name (JPEG, PNG, WEBP, BMP)
+            format_name: The format name (JPEG, PNG, WEBP, BMP, HEIC)
             
         Returns:
             str: The file extension (without dot)
@@ -63,6 +74,7 @@ class HeicConverter:
             "PNG": "png",
             "WEBP": "webp",
             "BMP": "bmp",
-            "HEIC": "heic"
+            "HEIC": "heic",
+            "HEIF": "heif"
         }
         return format_extensions.get(format_name.upper(), "jpg") 

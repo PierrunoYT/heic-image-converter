@@ -10,6 +10,7 @@ from converter_core import HeicConverter
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(32)  # Generate a secure random secret key
+app.config['MAX_CONTENT_LENGTH'] = MAX_CONTENT_LENGTH  # Set the maximum upload size
 
 # Allow only HEIC/HEIF file extensions for upload
 ALLOWED_EXTENSIONS: Set[str] = {"heic", "heif", "jpg", "jpeg", "png", "webp", "bmp"}
@@ -19,6 +20,12 @@ MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16MB max file size
 def allowed_file(filename: str) -> bool:
     """Check if the file extension is allowed."""
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.errorhandler(413)
+def request_entity_too_large(error):
+    """Handle file uploads that exceed the size limit."""
+    flash(f"File too large. Maximum file size is 16MB.")
+    return redirect(request.url)
 
 @app.route("/", methods=["GET", "POST"])
 def index():

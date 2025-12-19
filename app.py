@@ -8,14 +8,16 @@ from flask import Flask, request, render_template, send_file, flash, redirect
 import secrets
 from converter_core import HeicConverter
 
+# Define constants before app initialization
+MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16MB max file size
+ALLOWED_EXTENSIONS: Set[str] = {"heic", "heif", "jpg", "jpeg", "png", "webp", "bmp"}
+ALLOWED_FORMATS: Set[str] = {"HEIC", "JPEG", "PNG", "WEBP", "BMP"}
+
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(32)  # Generate a secure random secret key
 app.config['MAX_CONTENT_LENGTH'] = MAX_CONTENT_LENGTH  # Set the maximum upload size
 
 # Allow only HEIC/HEIF file extensions for upload
-ALLOWED_EXTENSIONS: Set[str] = {"heic", "heif", "jpg", "jpeg", "png", "webp", "bmp"}
-ALLOWED_FORMATS: Set[str] = {"HEIC", "JPEG", "PNG", "WEBP", "BMP"}
-MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16MB max file size
 
 def allowed_file(filename: str) -> bool:
     """Check if the file extension is allowed."""

@@ -2,9 +2,10 @@
 # © 2025 HEIC Converter
 
 import io
+import os
 from pathlib import Path
 from typing import Set
-from flask import Flask, request, render_template, send_file, flash, redirect
+from flask import Flask, request, render_template, send_file, flash, redirect, url_for
 import secrets
 from converter_core import HeicConverter
 
@@ -12,9 +13,16 @@ from converter_core import HeicConverter
 MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16MB max file size
 ALLOWED_EXTENSIONS: Set[str] = {"heic", "heif", "jpg", "jpeg", "png", "webp", "bmp"}
 ALLOWED_FORMATS: Set[str] = {"HEIC", "JPEG", "PNG", "WEBP", "BMP"}
+MIME_TYPES: dict = {
+    "JPEG": "image/jpeg",
+    "PNG": "image/png",
+    "WEBP": "image/webp",
+    "BMP": "image/bmp",
+    "HEIC": "image/heif",
+}
 
 app = Flask(__name__)
-app.secret_key = secrets.token_hex(32)  # Generate a secure random secret key
+app.secret_key = os.environ.get("SECRET_KEY") or secrets.token_hex(32)
 app.config['MAX_CONTENT_LENGTH'] = MAX_CONTENT_LENGTH  # Set the maximum upload size
 
 # Allow only HEIC/HEIF file extensions for upload
@@ -26,8 +34,8 @@ def allowed_file(filename: str) -> bool:
 @app.errorhandler(413)
 def request_entity_too_large(error):
     """Handle file uploads that exceed the size limit."""
-    flash(f"File too large. Maximum file size is 16MB.")
-    return redirect(request.url)
+    flash("File too large. Maximum file size is 16MB.")
+    return redirect(url_for("index"))
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -41,7 +49,7 @@ def index():
             flash("No file selected")
             return redirect(request.url)
 
-        if not file.filename or not allowed_file(file.filename):
+        if not allowed_file(file.filename):
             flash("Unsupported file type. Please select a valid image file (HEIC, JPEG, PNG, WEBP, or BMP).")
             return redirect(request.url)
 
@@ -54,7 +62,9 @@ def index():
         try:
             # Read and process the file using the core converter
             file_bytes = file.read()
-            output_bytes = HeicConverter.convert_heic(file_bytes, output_format=target_format)
+            quality = int(request.form.get("quality", 85))
+            quality = max(1, min(quality, 100))
+            output_bytes = HeicConverter.convert_heic(file_bytes, output_format=target_format, quality=quality)
 
             # Create a safe output filename using the preferred extension
             extension = HeicConverter.get_extension_for_format(target_format)
@@ -62,7 +72,7 @@ def index():
 
             return send_file(
                 io.BytesIO(output_bytes),
-                mimetype=f"image/{target_format.lower()}",
+                mimetype=MIME_TYPES[target_format],
                 as_attachment=True,
                 download_name=output_filename,
                 max_age=0

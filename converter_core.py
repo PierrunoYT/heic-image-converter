@@ -14,12 +14,13 @@ class HeicConverter:
     """Core converter class for handling HEIC/HEIF image conversions."""
     
     @staticmethod
-    def convert_heic(input_data: Union[bytes, Path], output_format: str = "JPEG") -> bytes:
+    def convert_heic(input_data: Union[bytes, Path], output_format: str = "JPEG", quality: int = 85) -> bytes:
         """Convert HEIC/HEIF image to the specified format.
         
         Args:
             input_data: Either a Path object pointing to the input file or bytes containing the image data
             output_format: Target format (JPEG, PNG, WEBP, BMP, HEIC)
+            quality: Output quality for lossy formats (1-100, default 85)
             
         Returns:
             bytes: Converted image data
@@ -39,21 +40,24 @@ class HeicConverter:
             
             # Determine if the target format supports alpha channel
             supports_alpha = save_format.upper() in ('PNG', 'WEBP', 'HEIF')
-            
-            # Convert image mode based on alpha channel support
-            if image.mode in ('RGBA', 'LA') or (image.mode == 'P' and 'transparency' in image.info):
-                # Image has transparency
-                if supports_alpha:
-                    image = image.convert('RGBA')
-                else:
-                    # Formats like JPEG and BMP don't support alpha, convert to RGB
-                    image = image.convert('RGB')
-            else:
+
+            # Convert image mode based on alpha support and current mode
+            has_transparency = (
+                image.mode in ('RGBA', 'LA') or
+                (image.mode == 'P' and 'transparency' in image.info)
+            )
+            if has_transparency:
+                image = image.convert('RGBA' if supports_alpha else 'RGB')
+            elif image.mode not in ('RGB', 'L'):
+                # Preserve grayscale; convert palette/other modes to RGB
                 image = image.convert('RGB')
             
-            # Save to bytes
+            # Save to bytes, passing quality for lossy formats
             output = io.BytesIO()
-            image.save(output, format=save_format)
+            save_kwargs: dict = {"format": save_format}
+            if save_format.upper() in ('JPEG', 'WEBP', 'HEIF'):
+                save_kwargs["quality"] = quality
+            image.save(output, **save_kwargs)
             return output.getvalue()
             
         except Exception as e:

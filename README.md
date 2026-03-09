@@ -12,9 +12,12 @@ A modern web application for bi-directional image conversion between HEIC and ot
   - Convert JPEG, PNG, WEBP, or BMP images to space-efficient HEIC format
 - Modern, responsive web interface with drag-and-drop support
 - Dark/light theme support
+- Adjustable output quality for lossy formats (JPEG, WEBP, HEIC)
+- Correct MIME types for all output formats, including HEIC (`image/heif`)
+- Grayscale images are preserved without unnecessary conversion to RGB
 - Clean error handling with user-friendly messages
 - Handles both `.jpg` and `.jpeg` extensions consistently (default is `.jpg` for JPEG)
-- Preserves image quality during conversion
+- Stable sessions across restarts when `SECRET_KEY` environment variable is set
 
 ## Project Structure
 
@@ -39,9 +42,9 @@ pip install -r requirements.txt
 ```
 
 The main dependencies are:
-- [pyheif](https://pypi.org/project/pyheif/) - For reading HEIC image files
-- [Pillow](https://pypi.org/project/Pillow/) - For processing images
-- [Flask](https://pypi.org/project/Flask/) - Web framework for the application
+- [pillow-heif](https://pypi.org/project/pillow-heif/) 0.21.0 — HEIC/HEIF support for Pillow
+- [Pillow](https://pypi.org/project/Pillow/) 11.1.0 — Image processing
+- [Flask](https://pypi.org/project/Flask/) 3.1.0 — Web framework
 
 ## Installation
 
@@ -71,8 +74,9 @@ The web interface allows you to:
 2. Choose your desired output format:
    - Convert from HEIC to JPEG, PNG, WEBP, or BMP for better compatibility
    - Convert from JPEG, PNG, WEBP, or BMP to HEIC for efficient storage
-3. Convert and download the processed image instantly
-4. Toggle between dark and light themes for comfortable viewing
+3. Optionally set an output quality level (1–100) for lossy formats (JPEG, WEBP, HEIC); default is 85
+4. Convert and download the processed image instantly
+5. Toggle between dark and light themes for comfortable viewing
 
 ## Platform-Specific Instructions
 
